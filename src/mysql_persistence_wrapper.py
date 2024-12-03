@@ -10,8 +10,11 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 		"""Initializes """
 		# Constants
 		self.SELECT_ALL_INVENTORIES = 'SELECT id, name, description FROM inventories'
-		self.INSERT = 'INSERT INTO items (inventory_id, item, count) VALUES(%s, %s, %s)'
+		self.INSERT = 'INSERT INTO items (inventory_id, item, count) VALUES(%s, %s, %s)'		
 		self.SELECT_ALL_ITEMS_FOR_INVENTORY_ID = 'SELECT id, inventory_id, item, count FROM items WHERE inventory_id = %s'
+
+		# # use this if you need to handle duplicates after INSERT clause
+		#self.DUPHANDLER = 'ON DUPLICATE KEY UPDATE count = count + VALUES(count)'
 
 		# Database Configuration Constants
 		self.DB_CONFIG = {}
@@ -40,7 +43,7 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 		"""Returns a list of all items for given inventory id"""
 		cursor = None
 		try:
-			cursor = self._db_connection.cursor()
+			cursor = self._db_connection.cursor()		
 			cursor.execute(self.SELECT_ALL_ITEMS_FOR_INVENTORY_ID, ([inventory_id]))
 			results = cursor.fetchall()
 		except Exception as e:
@@ -55,7 +58,15 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 
 	def create_item(self, inventory_id: int, item: str, count: int):
 		"""Insert new row into items table for given inventory id"""
-		pass
+		cursor = None
+		try:
+			cursor = self._db_connection.cursor()
+			cursor.execute(f'{self.INSERT}', (inventory_id, item, count))
+			#review these two following lines
+			results = cursor.fetchall()
+		except Exception as e:
+			print(f'Exception in persistance wrapper: {e}')
+		return results
 		
 		
 	def _initialize_database_connection(self, config):

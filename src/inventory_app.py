@@ -127,8 +127,21 @@ class InventoryApp():
 	def add_items(self):
 		"""Add items to inventory."""
 		if __debug__:
-			print('add_items() method called...')
-		input('\n\vThis method is not yet implemented. Press any key to continue: ')
+			print('add_items() method called...')	
+
+		if self.active_inventory_id != 0:
+			inventory_id = self.active_inventory_id
+			item = input("input item name: ")
+			count = input("input item count: ")
+			self.business_logic.add_item(inventory_id, item, count)
+			input('\n\nPress any key to continue...')
+		else:
+			print("You must select an inventory to add an item.")
+			input('\n\nPress any key to continue...')
+
+			
+
+		#input('\n\vThis method is not yet implemented. Press any key to continue: ')
 
 
 	def start_application(self):
@@ -147,7 +160,13 @@ class InventoryApp():
 
 	def print_items_list(self, items_list):
 		t = PrettyTable(['ID', 'Inventory ID', 'Item', 'Count'])
+		###test2
+		print(type(items_list))
 		for row in items_list:
+			###test1
+			###
+			print(row)
+			###
 			t.add_row([row[0], row[1], row[2], row[3]])
 		print(t)
 

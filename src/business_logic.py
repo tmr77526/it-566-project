@@ -40,6 +40,17 @@ class BusinessLogic():
 		return return_results
 
 
+	#new feature
+	def add_item(self, inventory_id: int, item: str, count: int):
+		"""Adds a new item to an inventory"""
+		item_id = 0
+		try:
+			item_id = self._persistence_wrapper.create_item(inventory_id, item, count)
+		except Exception as e:
+			print(f'Exception in business logic: {e}')
+		return item_id
+	
+
 	def create_new_inventory(self, name: str, description: str, date: str):
 		"""Adds a new inventory to the datastore."""
 		inventory_id = 0
