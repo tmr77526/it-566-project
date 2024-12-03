@@ -70,7 +70,16 @@ class InventoryApp():
 		self.clear_screen()
 		if __debug__:
 			print('new_inventory() method called...')
-		input('\n\nThis method is not yet implemented. Press any key to continue: ')
+
+		#get the values for the inventory from the user
+		name = input("Name your inventory: ")
+		description = input("Describe your inventory: ")
+		date = input("Give it a date: ")
+		
+		#call the business logic method that creates a new inventory
+		self.business_logic.create_new_inventory(name, description, date)
+	
+		input('\n\nPress any key to continue...')
 		
 
 	def list_inventories(self):
@@ -129,7 +138,7 @@ class InventoryApp():
 		if __debug__:
 			print('add_items() method called...')	
 
-		if self.active_inventory_id != 0:
+		if self.active_inventory_id != 0:			
 			inventory_id = self.active_inventory_id
 			item = input("input item name: ")
 			count = input("input item count: ")
@@ -159,14 +168,8 @@ class InventoryApp():
 		print(t)
 
 	def print_items_list(self, items_list):
-		t = PrettyTable(['ID', 'Inventory ID', 'Item', 'Count'])
-		###test2
-		print(type(items_list))
-		for row in items_list:
-			###test1
-			###
-			print(row)
-			###
+		t = PrettyTable(['ID', 'Inventory ID', 'Item', 'Count'])		
+		for row in items_list:			
 			t.add_row([row[0], row[1], row[2], row[3]])
 		print(t)
 

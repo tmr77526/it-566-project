@@ -9,6 +9,7 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 	def __init__(self):
 		"""Initializes """
 		# Constants
+		self.INSERTINV = 'INSERT INTO inventories (name, description, date) VALUES(%s, %s, %s)'
 		self.SELECT_ALL_INVENTORIES = 'SELECT id, name, description FROM inventories'
 		self.INSERT = 'INSERT INTO items (inventory_id, item, count) VALUES(%s, %s, %s)'		
 		self.SELECT_ALL_ITEMS_FOR_INVENTORY_ID = 'SELECT id, inventory_id, item, count FROM items WHERE inventory_id = %s'
@@ -53,7 +54,14 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 
 	def create_inventory(self, name: str, description: str, date: str):
 		"""Insert new row into inventories table."""
-		pass
+		cursor = None
+		try:
+			cursor = self._db_connection.cursor()
+			cursor.execute(self.INSERTINV, (name, description, date))
+			results = cursor.fetchall()
+		except Exception as e:
+			print(f'Exception in persistance wrapper: {e}')
+		return results		
 
 
 	def create_item(self, inventory_id: int, item: str, count: int):
@@ -61,8 +69,7 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 		cursor = None
 		try:
 			cursor = self._db_connection.cursor()
-			cursor.execute(f'{self.INSERT}', (inventory_id, item, count))
-			#review these two following lines
+			cursor.execute(f'{self.INSERT}', (inventory_id, item, count))			
 			results = cursor.fetchall()
 		except Exception as e:
 			print(f'Exception in persistance wrapper: {e}')
