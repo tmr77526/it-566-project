@@ -58,6 +58,7 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 		try:
 			cursor = self._db_connection.cursor()
 			cursor.execute(self.INSERTINV, (name, description, date))
+			self._db_connection.commit()
 			results = cursor.fetchall()
 		except Exception as e:
 			print(f'Exception in persistance wrapper: {e}')
@@ -69,7 +70,8 @@ class MySQLPersistenceWrapper(PersistenceWrapperInterface):
 		cursor = None
 		try:
 			cursor = self._db_connection.cursor()
-			cursor.execute(f'{self.INSERT}', (inventory_id, item, count))			
+			cursor.execute(f'{self.INSERT}', (inventory_id, item, count))
+			self._db_connection.commit()			
 			results = cursor.fetchall()
 		except Exception as e:
 			print(f'Exception in persistance wrapper: {e}')

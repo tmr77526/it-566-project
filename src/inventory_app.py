@@ -135,6 +135,7 @@ class InventoryApp():
 
 	def add_items(self):
 		"""Add items to inventory."""
+		self.clear_screen()
 		if __debug__:
 			print('add_items() method called...')	
 
